@@ -1,6 +1,4 @@
 from rest_framework import viewsets, permissions, filters
-from rest_framework.pagination import PageNumberPagination
- 
 
 from .serializers import UserSerializer
 from .models import User
@@ -9,7 +7,6 @@ class UserViewSet(viewsets.ModelViewSet):
    
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    pagination_class = PageNumberPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['username', 'email']
     ordering_fields = ['username', 'date_joined']
