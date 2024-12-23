@@ -38,5 +38,5 @@ class User(AbstractUser):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'email' # Using Email instead of Username Because it is a workplace App
+    REQUIRED_FIELDS = ['username'] # Making sure Username is Required for Account Creation

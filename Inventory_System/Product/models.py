@@ -8,9 +8,7 @@ User = get_user_model()
 # category Model
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True, default="Unnamed")
-    description = models.TextField(blank=True, default="")
-
-    
+    description = models.TextField(blank=True, default="")   
 
     def __str__(self):
         return self.name
