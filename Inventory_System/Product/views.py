@@ -2,12 +2,16 @@ from rest_framework import viewsets, filters, permissions, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
+from rest_framework.serializers import Serializer, CharField, IntegerField
 from django.db.models import F
 
 from .models import Product, Category, Supplier
 from .serializers import ProductSerializers, SupplierSerializers, CategorySerializers
 # Create your views here.
 
+class ProductInventorySerializer(Serializer):
+    name = CharField()
+    quantity = IntegerField()
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -21,7 +25,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticatedOrReadOnly])
     def current_inventory(self, request):
         """
-        Retrieve current inventory levels for all items, with optional filters.
+        Retrieve current inventory levels for all products with  filters.
         """
         queryset = self.get_queryset()
 
@@ -44,18 +48,16 @@ class ProductViewSet(viewsets.ModelViewSet):
         if category:
             queryset = queryset.filter(category__name=category)
         if min_price:
-            queryset = queryset.filter(unit_price__gte=min_price)
+            queryset = queryset.filter(unit_price__gte=float(min_price))
         if max_price:
-            queryset = queryset.filter(unit_price__lte=max_price)
+            queryset = queryset.filter(unit_price__lte=float(max_price))
         if low_stock:
             queryset = queryset.filter(quantity__lte=F('reorder_level'))
 
-        if not queryset.exists():
-            return Response({"detail": "No products match the given criteria."}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = self.get_serializer(queryset, many=True)
+        # Use the above serializer to display products and current quantities
+        serializer = ProductInventorySerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+        
 class SupplierViewSet(viewsets.ModelViewSet):
     queryset = Supplier.objects.all()
     serializer_class = SupplierSerializers
@@ -69,3 +71,4 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
+    

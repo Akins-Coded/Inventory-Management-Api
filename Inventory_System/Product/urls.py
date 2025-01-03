@@ -14,5 +14,5 @@ router.register(r'suppliers', SupplierViewSet, basename='supplier')
 urlpatterns = [
     path('', include(router.urls)),  # Automatically generates URL patterns for CRUD actions
     path('products/levels', ProductViewSet.as_view({'get': 'current_inventory'}), name='current_inventory'),
-]
+] # there 's alert created in models
 
