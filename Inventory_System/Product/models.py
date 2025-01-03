@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.contrib.auth import get_user_model
+from django.db.models import F, Q
 # Create your models here.
 
 # Import User
@@ -52,4 +53,18 @@ class Product(models.Model):
  
     
     def is_low_stock(self):
-        return self.quantity <= self.reorder_level
+        return self.quantity <= self.reorder_level # quantity is smaller or equal to the reorder level of each product
+    
+    @classmethod
+    def check_and_notify_low_stock(cls):
+        """Class method to check and notify low-stock products."""
+        low_stock_products = cls.objects.filter(Q(quantity__lte=F("reorder_level")))
+        for product in low_stock_products:
+            generate_low_stock_alert(product)
+
+# Utility function for low-stock alert
+def generate_low_stock_alert(product):
+    """Generate an alert for a low-stock product."""
+    print(
+        f"Alert: {product.name} is low on stock. Current quantity: {product.quantity}, Reorder level: {product.reorder_level}."
+    )
