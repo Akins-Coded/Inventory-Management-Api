@@ -68,3 +68,4 @@ def generate_low_stock_alert(product):
     print(
         f"Alert: {product.name} is low on stock. Current quantity: {product.quantity}, Reorder level: {product.reorder_level}."
     )
+    
