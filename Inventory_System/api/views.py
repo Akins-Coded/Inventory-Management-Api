@@ -1,4 +1,4 @@
-
+from django.db.models import F
 from django.contrib.auth import get_user_model
 
 from rest_framework import viewsets, filters, permissions, status
@@ -6,14 +6,14 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer, CharField, IntegerField
-from django.db.models import F
+
 from Product.models import Product, Category, Supplier
 from .serializers import ProductSerializers, SupplierSerializers, CategorySerializers, UserSerializer
-# Create your views here.
+
 
 User = get_user_model()
+
 class UserViewSet(viewsets.ModelViewSet):
-   
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]

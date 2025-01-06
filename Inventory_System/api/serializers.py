@@ -9,19 +9,32 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email')
+
 class ProductSerializers(serializers.ModelSerializer):
+    created_by = serializers.ReadOnlyField(source='created_by.username')
+    updated_by = serializers.ReadOnlyField(source='updated_by.username') 
+
     class Meta:
         model = Product
-        fields = '__all__' # ['name', 'quantity', 'unit_price', 'supplier', 'description', 'Created_by', 'category' ]
-        read_only_fields = ['created_by', 'created_at']  # Make 'created_by' and 'created_at' read-only
+        fields = '__all__'  # Include all fields
+        read_only_fields = ['created_by', 'created_at', 'updated_by', 'updated_at']
 
     def create(self, validated_data):
-        # Get the logged-in user from the request context
+        """
+        Overridden create method to associate the logged-in user with the created product.
+        """
         user = self.context['request'].user
-        
-        # Create the product and associate it with the logged-in user
-        product = Product.objects.create(created_by=user, **validated_data)
-        return product
+        validated_data['created_by'] = user 
+        return super().create(validated_data) 
+    
+    def update(self, instance, validated_data):
+        """
+        Overridden update method to associate the logged-in user with the updated product.
+        """
+        user = self.context['request'].user
+        validated_data['updated_by'] = user 
+        return super().update(instance, validated_data)
+
 
 class CategorySerializers(serializers.ModelSerializer):
     class Meta:

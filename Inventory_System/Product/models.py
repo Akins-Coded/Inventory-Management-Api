@@ -37,8 +37,8 @@ class Product(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='product_created')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='product_updated')
-    sku = models.CharField(max_length=50, unique=True, default='DEFAULT_SKU')  # Stock Keeping Unit
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='product_updated')
+    sku = models.CharField(max_length=50, unique=True, blank=False, null=False)  # Stock Keeping Unit
     reorder_level = models.PositiveIntegerField(default=0)  # Minimum stock level
 
     def save(self, *args, **kwargs):
