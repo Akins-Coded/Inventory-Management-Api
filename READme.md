@@ -1,2 +1,3 @@
-# CAPSTONE PROJECT FOR ALX BE COHOURT 2 
+
 # INVENTORY MANAGEMENT API
+Any api that allows Stock Controllers and Inventory managers to perform CRUD operations for products and track Stock levels
