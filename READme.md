@@ -18,7 +18,7 @@ A RESTful API designed to efficiently track and manage inventory data in real ti
 - **Python 3.12**
 - **Django 5+**
 - **Django REST Framework**
-- **PostgreSQL**
+- **SQLite**
 - **JWT Authentication**
 
 ---
