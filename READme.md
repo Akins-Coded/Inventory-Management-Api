@@ -54,16 +54,7 @@ POST /api/token/
 Authorization: Bearer <your_token_here>
 ```
 
----
 
-## 🧪 Running Tests
-
-```bash
-# Run unit tests
-pytest
-```
-
----
 
 ## 📦 API Endpoints Overview
 
